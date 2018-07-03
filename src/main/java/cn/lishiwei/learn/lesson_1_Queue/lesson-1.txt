@@ -1,0 +1,55 @@
+java队列--Queue详细分析
+
+特点：先入先出(FIFO)的数据结构
+
+实现Collection接口，Collection接口实现了Iterable接口
+
+Queue的实现
+
+1、双端队列：Deque
+2、AbstractQueue：非阻塞队列
+3、BlockingQueue：阻塞队列
+
+AbstractQueue：非阻塞队列，效率比阻塞队列要高一些
+
+非阻塞队列：PriorityQueue和ConcurrentLinkedQueue均实现了AbstractQueue接口
+PriorityQueue队列：一个有序列表，按照优先级顺序进行移除数据，实质上并不是一个先进先出的数据结构，而是一个基于堆的数据结构
+ConcurrentLinkedQueue：一个基于链表的、无界、线性安全队列，实际上说无界并不太准确，队列长度为Integer.MAX_VALUE，
+同时，线性安全的原因：tail指针并不是每次都会指向最后一个尾节点，而是指向尾节点或者tail.next指向尾节点，为何会线性安全，
+是因为tail指针在每次添加元素后，会进行一次计算，重新计算指针位置。
+使用ConcurrentLinkedQueue需要注意点：队列不要使用size大小来判断队列是否为空，因为队列是动态变化的，数量的变化是异步的，
+而且获取数量的操作时间并不是固定的，随着长度的变化而变化，因此，size函数，会对队列进行遍历，进行一次O(n)的遍历，判断队列
+是否为空要使用isEmpty函数进行判断。
+
+队列的常用方法：
+add: 在队尾增加一个元素
+contains: 如果队列中包含该元素，则返回true，否则返回false
+isEmpty: 如果队列不为空，则返回false，否则返回true
+iterator: 迭代器，实现iterable接口
+offer: 在队尾增加一个元素，与add不同的是，offer时，如果超过最大队列长度，offer会返回false,而add则会抛出异常
+poll: 从队头获取数据，并移除，如果为空，则返回null，因此队列中是不允许存在Null元素节点的
+peek: 从队头获取数据，但并不移除该数据
+size: 获取队列中元素的个数
+toArray: 将队列转换为数组
+
+BlockingQueue：阻塞队列，阻塞队列会使得线程阻塞
+
+1、LinkedBlockingQueue: 基于链表的队列，无界，大小可选
+2、ArrayBlockingQueue: 基于数组的队列，大小需要在构造时指定，并且可以指定线程执行的公平性，借助于可重入锁ReentrantLock的公平锁
+和非公平锁的设置。
+3、PriorityBlockingQueue：是对PriorityQueue的封装，是一个带有优先级顺序的队列，并按照优先级顺序进行移除，并不是一个FIFO队列
+4、DelayQueue:延迟队列， 只有延迟期满后，才可以从队头获取数据和移除数据，否则，返回null
+5、SynchronousQueue 
+
+
+阻塞队列中，增加了put和take两个存取数据的操作
+put         添加一个元素                      如果队列满，则阻塞
+take        移除并返回队列头部的元素     如果队列为空，则阻塞
+
+
+实例：
+1、验证ConcurrentLinkedQueue，验证size和isEmpty之间的差距，包含其他的操作
+2、使用ArrayBlockingQueue和线程池，模拟消费者和生产者
+
+
+
