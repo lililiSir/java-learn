@@ -6,18 +6,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Integer[] array = new Integer[]{35, 17, 39, 9, 28, 65, 56, 87};
+        Integer[] array = new Integer[]{4, 2, 7, 6, 5, 8};
 
-        NodeTree root = null;
+        NodeTree root = new NodeTree(array[0], null, null);;
 
-        for (int i = 0; i < array.length; i++) {
-
-            NodeTree currentNode = new NodeTree(array[i], null, null);
-
-            if (root == null) {
-                root = currentNode;
-            }
-
+        for (int i = 1; i < array.length; i++) {
             root.Insert(root, array[i]);
         }
         System.out.println("先序遍历");
