@@ -6,12 +6,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Integer[] array = new Integer[]{4, 2, 7, 6, 5, 8};
-
-        NodeTree root = new NodeTree(array[0], null, null);;
+        Integer[] array = new Integer[]{4, 2, 7, 5, 6, 8};
+//        Integer[] array = new Integer[]{8, 5, 3, 6, 7, 12};
+//        Integer[] array = new Integer[]{12, 8, 13, 7, 6, 9};
+        NodeTree root = new NodeTree(array[0], null, null);
 
         for (int i = 1; i < array.length; i++) {
-            root.Insert(root, array[i]);
+            root = root.Insert(root, array[i]);
         }
         System.out.println("先序遍历");
         preOrder(root);

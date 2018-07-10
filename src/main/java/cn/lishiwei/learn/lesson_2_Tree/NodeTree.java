@@ -1,8 +1,6 @@
 package cn.lishiwei.learn.lesson_2_Tree;
 
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
-
 public class NodeTree {
 
     private Integer data;
@@ -47,17 +45,16 @@ public class NodeTree {
         if (data > root.getData()) {
 
             if (root.getRightNodeTree() != null) {
-                Insert(root.getRightNodeTree(), data);
+                root.rightNodeTree = Insert(root.getRightNodeTree(), data);
 
 
-                if (Math.abs(height(root.leftNodeTree, 0) - height(root.rightNodeTree, 0)) == 2) {
+                if (height(root.rightNodeTree, 0) - height(root.leftNodeTree, 0) == 2) {
 
-                    if (data < root.getData()) {
-                        LL(root);
+                    if (data < root.getRightNodeTree().getData()) {
+                        root = RL(this);
                     } else {
-                        RL(root);
+                        root = RR(this);
                     }
-
                 }
 
             } else {
@@ -67,14 +64,14 @@ public class NodeTree {
 
         if (data < root.getData()) {
             if (root.getLeftNodeTree() != null) {
-                Insert(root.getLeftNodeTree(), data);
+                root.leftNodeTree = Insert(root.getLeftNodeTree(), data);
 
-                if (Math.abs(height(root.leftNodeTree, 0) - height(root.rightNodeTree, 0)) == 2) {
+                if (height(root.leftNodeTree, 0) - height(root.rightNodeTree, 0) == 2) {
 
-                    if (data < root.getData()) {
-                        LR(root);
+                    if (data < root.getLeftNodeTree().getData()) {
+                        root = LL(root);
                     } else {
-                        RR(root);
+                        root = LR(root);
                     }
 
                 }
@@ -107,14 +104,8 @@ public class NodeTree {
      */
     public NodeTree RR(NodeTree root) {
         NodeTree temp = root.rightNodeTree;
-
-        if (temp != null) {
-            root.rightNodeTree = temp.leftNodeTree;
-            temp.leftNodeTree = root;
-        } else {
-
-        }
-
+        root.rightNodeTree = temp.leftNodeTree;
+        temp.leftNodeTree = root;
         root = temp;
         return root;
     }
@@ -129,9 +120,9 @@ public class NodeTree {
 
         NodeTree left = root.leftNodeTree;
 
-        root.leftNodeTree = LL(left);
+        root.leftNodeTree = RR(left);
 
-        RR(root);
+        root = LL(root);
 
         return root;
     }
@@ -146,9 +137,9 @@ public class NodeTree {
 
         NodeTree right = root.rightNodeTree;
 
-        root.rightNodeTree = RR(right);
+        root.rightNodeTree = LL(right);
 
-        LL(root);
+        root = RR(root);
 
         return root;
     }
