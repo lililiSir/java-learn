@@ -1,6 +1,8 @@
 package cn.lishiwei.learn.lesson_2_Tree;
 
 
+import javax.xml.soap.Node;
+
 public class NodeTree {
 
     private Integer data;
@@ -51,9 +53,9 @@ public class NodeTree {
                 if (height(root.rightNodeTree, 0) - height(root.leftNodeTree, 0) == 2) {
 
                     if (data < root.getRightNodeTree().getData()) {
-                        root = RL(this);
+                        root = doubleRotateRL(root);
                     } else {
-                        root = RR(this);
+                        root = L_rotate(root);
                     }
                 }
 
@@ -69,9 +71,9 @@ public class NodeTree {
                 if (height(root.leftNodeTree, 0) - height(root.rightNodeTree, 0) == 2) {
 
                     if (data < root.getLeftNodeTree().getData()) {
-                        root = LL(root);
+                        root = R_rotate(root);
                     } else {
-                        root = LR(root);
+                        root = doubleRotateLR(root);
                     }
 
                 }
@@ -83,65 +85,56 @@ public class NodeTree {
         return root;
     }
 
-
     /**
-     * 左旋转，适合右右类型的树
+     * 右旋转,适合左左树类型
      *
      * @param root
+     * @return
      */
-    public NodeTree LL(NodeTree root) {
+    public NodeTree R_rotate(NodeTree root) {
         NodeTree temp = root.leftNodeTree;
         root.leftNodeTree = temp.rightNodeTree;
         temp.rightNodeTree = root;
-        root = temp;
-        return root;
+        return temp;
     }
 
     /**
-     * 右旋转，适合左左类型的树
+     * 左旋转，适合右右树类型
      *
      * @param root
+     * @return
      */
-    public NodeTree RR(NodeTree root) {
+    public NodeTree L_rotate(NodeTree root) {
         NodeTree temp = root.rightNodeTree;
         root.rightNodeTree = temp.leftNodeTree;
         temp.leftNodeTree = root;
-        root = temp;
-        return root;
+        return temp;
     }
 
+
     /**
-     * 左右类型，要在左子树上面进行一次右旋转，然后再进行一次左旋转
+     * 双旋转，适合左右类型的树
      *
      * @param root
      * @return
      */
-    public NodeTree LR(NodeTree root) {
+    public NodeTree doubleRotateLR(NodeTree root) {
 
-        NodeTree left = root.leftNodeTree;
-
-        root.leftNodeTree = RR(left);
-
-        root = LL(root);
-
-        return root;
+        NodeTree temp = root.leftNodeTree;
+        root.leftNodeTree = L_rotate(temp);
+        return R_rotate(root);
     }
 
     /**
-     * 右左类型，先进行一次左旋转，在进行一次右旋转
+     * 双旋转，适合右左类型的树
      *
      * @param root
      * @return
      */
-    public NodeTree RL(NodeTree root) {
-
-        NodeTree right = root.rightNodeTree;
-
-        root.rightNodeTree = LL(right);
-
-        root = RR(root);
-
-        return root;
+    public NodeTree doubleRotateRL(NodeTree root) {
+        NodeTree temp = root.rightNodeTree;
+        root.rightNodeTree = R_rotate(temp);
+        return L_rotate(root);
     }
 
 

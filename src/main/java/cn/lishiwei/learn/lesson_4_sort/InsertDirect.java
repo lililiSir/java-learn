@@ -1,11 +1,13 @@
 package cn.lishiwei.learn.lesson_4_sort;
 
-public class InsertDirect {
+public class InsertDirect implements BaseSort {
+
+    private Integer[] array = {49, 38, 65, 97, 76, 13, 27, 49, 78, 34, 12, 64, 1};
 
     /**
      * 直接插入排序
      */
-    public Integer[] sort(Integer[] array) {
+    public Integer[] sort() {
 
         for (int i = 1; i < array.length; i++) {
 
@@ -27,5 +29,6 @@ public class InsertDirect {
 
         return array;
     }
+
 
 }

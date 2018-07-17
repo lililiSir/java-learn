@@ -1,14 +1,23 @@
 package cn.lishiwei.learn.lesson_2_Tree;
 
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
+
 public class Main {
 
 
     public static void main(String[] args) {
 
-        Integer[] array = new Integer[]{4, 2, 7, 5, 6, 8};
-//        Integer[] array = new Integer[]{8, 5, 3, 6, 7, 12};
-//        Integer[] array = new Integer[]{12, 8, 13, 7, 6, 9};
+        LocalDate localDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+        System.out.println(localDate.getMonth().getValue());
+        System.out.println(localDate.getMonthValue());
+
+        // Integer[] array = new Integer[]{4, 2, 7, 5, 6, 8};
+        // Integer[] array = new Integer[]{8, 5, 3, 6, 7, 12};
+        Integer[] array = new Integer[]{12, 8, 13, 7, 6, 9};
         NodeTree root = new NodeTree(array[0], null, null);
 
         for (int i = 1; i < array.length; i++) {
