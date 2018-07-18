@@ -26,7 +26,7 @@ public class QuickSort implements BaseSort {
             return;
         }
 
-        int middle = middle(array, low, high);
+        int middle = middle2(array, low, high);
         quickSort(array, 0, middle - 1);
         quickSort(array, middle + 1, high);
     }
@@ -56,5 +56,38 @@ public class QuickSort implements BaseSort {
 
         return low;
     }
+
+
+    private int middle2(Integer[] array, int low, int high) {
+
+
+        int i = low;
+        int j = high;
+
+        Integer temp = array[low];
+
+        while (i < j) {
+
+            while (i < j && array[j] >= temp) {
+                j--;
+            }
+
+            while (i < j && array[i] <= temp) {
+                i++;
+            }
+
+            if (i != j) {
+                int ex = array[j];
+                array[j] = array[i];
+                array[i] = ex;
+            }
+        }
+
+        array[low] = array[i];
+        array[i] = temp;
+
+        return i;
+    }
+
 
 }
