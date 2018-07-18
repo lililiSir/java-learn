@@ -59,7 +59,13 @@ public class main {
         }
         System.out.println("\n\n");
 
-
+        baseSort = new MegerSort();
+        array = baseSort.sort();
+        System.out.println("-------归并排序---------");
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i] + ",");
+        }
+        System.out.println("\n\n");
     }
 
 }
