@@ -1,0 +1,40 @@
+KMP算法，用于模式串匹配，从字符串中，匹配子串
+
+http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html
+https://www.cnblogs.com/c-cloud/p/3224788.html
+https://subetter.com/articles/2018/04/how-to-understand-kmp.html
+
+KMP算法，主要利用已经匹配过得串，进行移动，避免匹配过得，再重新进行匹配
+
+KMP算法中，需要理解两个重要的概念：真前缀和真后缀
+1、真前缀：除最后一个字符外，一个字符串的全部头部组合
+2、真后缀：除第一个字符串外，一个字符串的全部尾部组合
+
+部分匹配表：部分匹配表是真前缀和真后缀相同的串的长度。
+
+移动位数：已经匹配的字符数-对应的部分匹配值
+
+以ABCDABD为例，
+
+i=0时，串为A，真前缀和真后缀都为空，其共有长度为0，有些算法会设为-1，第一个默认为-1
+
+i=1时，串为AB，真前缀为A，真后缀为B，共有元素为0；
+
+i=2时，串为ABC，真前缀为[A,AB]，真后缀为[BC,C]，共有元素为0；
+
+i=3时，串为ABCD，真前缀为[A,AB,ABC]，真后缀为[BCD,CD,D]，共有元素为0；
+
+i=4时，串为ABCDA，真前缀为[A,AB,ABC,ABCD]，真后缀为[BCDA,CDA,DA,A]，共有元素为A，长度为1；
+
+i=5时，串为ABCDAB，真前缀为[A,AB,ABC,ABCD，ABCDA]，真后缀为[BCDAB,CDAB,DAB,AB,B]，共有元素为AB，长度为2
+
+i=6时，串为ABCDABD，共有元素为0,
+
+根据上述运算，部分匹配表为
+
+i=0   i=1   i=2   i=3   i=4   i=5   i=6
+ A     B     C     D     A     B     D
+ -1    0     0     0     1     2     0
+
+
+KMP 算法最重要的一步就是生成next数组，next数组就是部分匹配表
