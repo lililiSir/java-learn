@@ -2,33 +2,32 @@ package cn.lishiwei.learn.lesson_8_Thread.lesson_8_4_ReentranLock;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ReentrantLockThread implements Runnable {
 
-    private volatile boolean isUpdated;
+    private volatile boolean cacheValid;
 
     private ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
 
-    private int current;
+    private Lock readLock = reentrantReadWriteLock.readLock();
+
+    private Lock writeLock = reentrantReadWriteLock.writeLock();
+
+    private  int currentValue = 0;
 
     private int num;
 
-    public boolean isUpdated() {
-        return isUpdated;
-    }
-
-    public void setUpdated(boolean updated) {
-        isUpdated = updated;
-    }
 
     public ReentrantLockThread(int num, boolean isUpdated) {
         this.num = num;
-        this.isUpdated = isUpdated;
     }
 
     @Override
     public void run() {
+        cacheValid = false;
+        Thread.currentThread().setName("test-thread-" + num);
         processCachedData2(num);
     }
 
@@ -41,15 +40,15 @@ public class ReentrantLockThread implements Runnable {
         HashMap<String, String> map = new HashMap<>();
         //获得读锁
         reentrantReadWriteLock.readLock().lock();
-        if (!isUpdated) {
+        if (!cacheValid) {
             reentrantReadWriteLock.readLock().unlock();
             reentrantReadWriteLock.writeLock().lock();
 
             try {
-                if (!isUpdated) {
-                    current = num + 1;
+                if (!cacheValid) {
+                    currentValue = num;
                     //修改数据
-                    isUpdated = true;
+                    cacheValid = true;
                 }
                 reentrantReadWriteLock.readLock().lock();
             } finally {
@@ -58,7 +57,7 @@ public class ReentrantLockThread implements Runnable {
         }
 
         try {
-            System.out.println(Thread.currentThread().getName() + ";获得的值为:" + map.get("reentrantlock"));
+            System.out.println(Thread.currentThread().getName() + ";获得的值为:" + currentValue);
         } finally {
             reentrantReadWriteLock.readLock().unlock();
         }
@@ -71,33 +70,31 @@ public class ReentrantLockThread implements Runnable {
      * @param num
      */
     private void processCachedData2(int num) {
-        HashMap<String, String> map = new HashMap<>();
-        //获得读锁
-        reentrantReadWriteLock.readLock().lock();
-        if (!isUpdated) {
-            reentrantReadWriteLock.readLock().unlock();
-            reentrantReadWriteLock.writeLock().lock();
 
-            try {
-                if (!isUpdated) {
-                    System.out.println(Thread.currentThread().getName() + ";开始修改数据");
-                    current = num;
-                    //修改数据
-                    isUpdated = true;
+        //获得读锁
+        readLock.lock();
+        if(!cacheValid){
+            readLock.unlock();
+            writeLock.lock();
+            try{
+                if(!cacheValid){
+                    System.out.println(Thread.currentThread().getName() + " has updated!");
+                    currentValue = num;
+                    cacheValid = true;
                 }
-            } finally {
-                reentrantReadWriteLock.writeLock().unlock();
+            }finally {
+                writeLock.unlock();
             }
         }
 
         try {
             TimeUnit.SECONDS.sleep(5);
-            System.out.println(Thread.currentThread().getName() + ";获得的值为:" + current);
+            System.out.println(Thread.currentThread().getName() + ";获得的值为:" + currentValue);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             if (reentrantReadWriteLock.getReadHoldCount() > 0) {
-                reentrantReadWriteLock.readLock().unlock();
+                readLock.unlock();
             }
         }
     }

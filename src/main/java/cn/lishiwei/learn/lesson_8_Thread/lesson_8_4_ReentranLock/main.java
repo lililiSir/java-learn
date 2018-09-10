@@ -1,10 +1,9 @@
 package cn.lishiwei.learn.lesson_8_Thread.lesson_8_4_ReentranLock;
 
-import cn.lishiwei.learn.lesson_8_Thread.lesson_8_3_volatile.ReadWriteLockTest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @Author: LiShiwei.
@@ -15,20 +14,16 @@ import java.util.concurrent.*;
 public class main {
 
     public static void main(String[] args) throws InterruptedException {
+        //
+        // ReadWriteLockTest readWriteLockTest = new ReadWriteLockTest();
+        //
+        // readWriteLockTest.testLockDowngrading();
 
+        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
 
-//        List<ReentrantLockThread> list = new ArrayList<>();
-//
-//        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 100, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(10));
-//
-//        for (int i = 0; i < 10; i++) {
-//            executor.execute(new ReentrantLockThread(i, false));
-//        }
-//        executor.shutdown();
+        Lock lock = reentrantReadWriteLock.readLock();
 
-        ReadWriteLockTest readWriteLockTest=new ReadWriteLockTest();
-
-        readWriteLockTest.testLockDowngrading();
+        Condition condition = lock.newCondition();
 
     }
 

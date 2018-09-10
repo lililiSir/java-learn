@@ -1,4 +1,4 @@
-package cn.lishiwei.learn.lesson_8_Thread.lesson_8_3_volatile;
+package cn.lishiwei.learn.lesson_8_Thread.lesson_8_4_ReentranLock;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
